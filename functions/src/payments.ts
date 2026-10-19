@@ -3,13 +3,14 @@ import { defineSecret } from 'firebase-functions/params';
 import { logger } from 'firebase-functions';
 import { FieldValue } from 'firebase-admin/firestore';
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
-import { db, uidOf, audit, ledger } from './db.js';
+import { db, uidOf, audit, ledger, shopOpen } from './db.js';
 import { COIN_PACKS } from './rules.js';
 
 const PAYSTACK_SECRET_KEY = defineSecret('PAYSTACK_SECRET_KEY');
 
 export const startPurchase = onCall({ secrets: [PAYSTACK_SECRET_KEY] }, async (req) => {
     const uid = uidOf(req);
+    shopOpen();
     const pack = COIN_PACKS[req.data?.pack];
     const email = req.data?.email;
     if (!pack) throw new HttpsError('invalid-argument', 'Unknown coin pack');

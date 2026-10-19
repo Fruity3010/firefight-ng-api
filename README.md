@@ -10,10 +10,10 @@ and every change to a wallet is written to a ledger and an audit log in the same
   added to the wallet and to the weekly leaderboard.
 - **Anti-cheat:** impossible scores are rejected and logged. After 3 rejections the account is flagged: it can't play,
   drops off the leaderboard and can't win prizes.
-- **Payments:** Paystack checkout started by the server (so the server sets the price). The webhook checks the signature
-  and credits each purchase exactly once, even when Paystack sends the same event several times.
+- **Payments (coming soon):** Paystack checkout started by the server (so the server sets the price). The webhook checks
+  the signature and credits each purchase exactly once, even when Paystack sends the same event several times.
 - **Weekly prizes:** every Monday the top verified, unflagged players get a payout record awaiting admin approval.
-- **Shop:** coins buy cosmetic items.
+- **Shop (coming soon):** coins buy cosmetic items.
 
 ## Run it
 
@@ -97,12 +97,13 @@ Today's daily challenge (Lagos date), the same for everyone.
 Coins earned that week. `week` like `2026-W43` (ISO week, Lagos time), default this week. `limit` 1 to 50, default 20.
 `me` is the caller's place, worked out with a count query rather than by reading the whole board.
 
-### Shop
+### Shop and coin purchases (coming soon)
+
+`buyItem` and `startPurchase` answer `unavailable: Coming soon` until the shop opens. To open it, set `SHOP_OPEN=true` in
+`functions/.env` and deploy. The webhook works either way.
 
 **`buyItem({ item })` → `{ coins, item }`**
 Items: `camo-desert` (600), `camo-night` (600), `callsign-gold` (1500), `drone-skin` (900). Each can be bought once.
-
-### Payments
 
 **`startPurchase({ pack, email })` → `{ reference, authorizationUrl }`**
 Packs: `coins-1000` (₦500), `coins-2500` (₦1,000), `coins-6000` (₦2,000). Writes a pending `purchases/{reference}`

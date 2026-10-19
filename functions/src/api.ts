@@ -1,6 +1,6 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import { FieldValue, Timestamp } from 'firebase-admin/firestore';
-import { db, uidOf, audit, ledger, checked } from './db.js';
+import { db, uidOf, audit, ledger, checked, shopOpen } from './db.js';
 import { ACHIEVEMENTS, LIMITS, MISSIONS, SHOP, callsign, credit, daily, judge, lagosDay, parseRun, weekId } from './rules.js';
 
 const player = (uid: string) => db.doc(`players/${uid}`);
@@ -149,6 +149,7 @@ export const getLeaderboard = onCall(async (req) => {
 
 export const buyItem = onCall(async (req) => {
     const uid = uidOf(req);
+    shopOpen();
     const item = SHOP[req.data?.item];
     if (!item) throw new HttpsError('invalid-argument', 'Unknown item');
     return db.runTransaction(async (tx) => {

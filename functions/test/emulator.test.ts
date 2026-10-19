@@ -151,13 +151,12 @@ test('a payment for the wrong amount is not credited', async () => {
     assert.equal((await db.doc(`players/${p.uid}`).get()).get('coins'), 0);
 });
 
-test('the shop spends coins once per item', async () => {
+test('the shop and coin purchases are coming soon', async () => {
     const p = await newPlayer();
     await db.doc(`players/${p.uid}`).update({ coins: 700 });
-    const r = await call('buyItem', { item: 'camo-desert' }, p.token);
-    assert.equal(r.coins, 100);
-    assert.equal((await call('buyItem', { item: 'camo-desert' }, p.token)).error, 'ALREADY_EXISTS');
-    assert.equal((await call('buyItem', { item: 'camo-night' }, p.token)).error, 'FAILED_PRECONDITION');
+    assert.equal((await call('buyItem', { item: 'camo-desert' }, p.token)).message, 'Coming soon');
+    assert.equal((await call('startPurchase', { pack: 'coins-1000', email: 'a@b.co' }, p.token)).message, 'Coming soon');
+    assert.equal((await db.doc(`players/${p.uid}`).get()).get('coins'), 700);
 });
 
 test('weekly prizes go only to verified, unflagged players, once', async () => {
