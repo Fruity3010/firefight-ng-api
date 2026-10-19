@@ -1,0 +1,25 @@
+{
+  "name": "firefight-ng-functions",
+  "private": true,
+  "type": "module",
+  "main": "lib/src/index.js",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test:unit": "npm run build && node --test lib/test/rules.test.js",
+    "test": "npm run build && echo PAYSTACK_SECRET_KEY=sk_test_emulator > .secret.local && firebase emulators:exec --project demo-firefight --only auth,firestore,functions 'node --test lib/test/*.test.js'",
+    "serve": "npm run build && firebase emulators:start --project demo-firefight --only auth,firestore,functions",
+    "deploy": "npm run build && firebase deploy --only functions,firestore"
+  },
+  "dependencies": {
+    "firebase-admin": "^14.5.0",
+    "firebase-functions": "^7.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "firebase-tools": "^15.34.0",
+    "typescript": "^7.0.2"
+  }
+}
