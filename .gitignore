@@ -3,3 +3,4 @@ functions/lib/
 functions/.secret.local
 *.log
 .firebase/
+functions/.env.local
